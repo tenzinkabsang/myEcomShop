@@ -1,0 +1,26 @@
+﻿@model Product
+
+@{
+    string mainImageUrl = Model.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? "";
+    int quantityPlaceHolderForNow = new Random().Next(4, 25);
+}
+
+<div class="card my-2 shadow-0">
+    <a asp-action="Detail" asp-controller="Home" asp-route-productId="@Model.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()" class="img-wrap">
+        <img src="@mainImageUrl" class="card-img-top" style="aspect-ratio: 1 / 1; object-fit: scale-down;">
+    </a>
+    <div class="card-body p-0 pt-2">
+
+        <h5 class="card-title">@Model.Price.ToString("c")</h5>
+
+        <p class="card-text mb-0 text-center">
+            <a asp-action="Detail" asp-controller="Home" asp-route-productId="@Model.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+               class="pt-2 float-end icon-hover" style="text-decoration: none;color: black;">
+                @Model.Name
+            </a>
+        </p>
+        <p class="text-muted">
+            Qty: @quantityPlaceHolderForNow
+        </p>
+    </div>
+</div>

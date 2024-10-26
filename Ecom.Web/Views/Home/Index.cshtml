@@ -1,0 +1,28 @@
+﻿@model ProductListViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Shop4Less</h1>
+</div>
+
+<div class="row">
+
+    @foreach (var p in Model.Products)
+    {
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <partial name="_ProductSummary" model="p" />
+        </div>
+    }
+
+</div>
+
+<div page-model="@Model.PagingInfo" page-action="index" class="btn-group pull-right m-1"
+     page-class-enabled="true"
+     page-class="btn"
+     page-class-normal="btn-outline-dark"
+     page-class-selected="btn-primary"
+     page-url-category="@Model.CurrentCategory!"></div>
