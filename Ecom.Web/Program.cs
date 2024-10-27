@@ -27,6 +27,14 @@ builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPu
 
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("*");
+    });
+});
+
 //builder.Services.AddTransient<DbInitializer>();
 
 var app = builder.Build();
@@ -44,6 +52,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseCors();
+
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -52,8 +62,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
-//app.ApplyMigrations();
 
 SeedData.Populate(app);
 app.Run();

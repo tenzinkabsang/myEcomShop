@@ -1,21 +1,51 @@
-﻿using Ecom.Core;
+﻿using System.Text.Json;
+using Ecom.Core;
 using Ecom.Core.Events;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Ecom.Data;
 
-public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity: BaseEntity
+public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {
     private readonly DbSet<TEntity> _dbSet;
     private readonly ApplicationDbContext _context;
+    private readonly IDistributedCache _cache;
     private readonly IEventPublisher _eventPublisher;
 
-    public BaseRepository(ApplicationDbContext context, IEventPublisher eventPublisher)
+    public BaseRepository(ApplicationDbContext context,
+        IDistributedCache cache,
+        IEventPublisher eventPublisher)
     {
         _context = context;
+        _cache = cache;
         _dbSet = context.Set<TEntity>();
         _eventPublisher = eventPublisher;
     }
+
+    private async Task<IList<TEntity>> GetEntitiesAsync(Func<Task<IList<TEntity>>> getAllAsync, string? cacheKey = null)
+    {
+        if (string.IsNullOrEmpty(cacheKey))
+            return await getAllAsync();
+
+        var cachedData = await _cache.GetStringAsync(cacheKey);
+
+        if (cachedData != null)
+            return JsonSerializer.Deserialize<IList<TEntity>>(cachedData)!;
+
+        var items = await getAllAsync();
+
+        await _cache.SetStringAsync(
+            cacheKey,
+            JsonSerializer.Serialize(items),
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(20)
+            });
+
+        return items;
+    }
+
 
     public async Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? func = null, bool includeDeleted = true)
     {
