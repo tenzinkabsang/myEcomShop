@@ -10,12 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 Dependencies.ConfigureDatabase(builder.Configuration, builder.Services);
-//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("MyEshop")));
 
-builder.Services.AddDistributedMemoryCache();
+var connectionString = builder.Configuration[builder.Configuration["AZURE_REDIS_CONNECTION_STRING"] ?? "ConnectionStrings:Redis"];
 
-
-//Dependencies.ConfigureDatabase(builder.Configuration, builder.Services);
+if(!string.IsNullOrWhiteSpace(connectionString))
+    builder.Services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
+else
+    builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 builder.Services.AddScoped<IProductService, ProductService>();

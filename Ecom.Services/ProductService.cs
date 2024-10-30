@@ -7,7 +7,7 @@ namespace Ecom.Services;
 
 public class ProductService(IRepository<Product> productRepository) : IProductService
 {
-    public async Task<IPagedList<Product>> GetProducts(string? category, int page, int pageSize)
+    public async Task<IPagedList<Product>> GetProductsAsync(string? category, int page, int pageSize)
     {
         return await productRepository.GetAllPagedAsync(
             query => query.Include(x => x.Images).Where(p => category == null || p.Category == category).OrderBy(p => p.Id),
@@ -16,7 +16,7 @@ public class ProductService(IRepository<Product> productRepository) : IProductSe
             includeDeleted: false);
     }
 
-    public async Task<Product> GetProduct(int id)
+    public async Task<Product> GetProductAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id, includeDeleted: false);
 

@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Ecom.Services\Ecom.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>

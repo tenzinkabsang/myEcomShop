@@ -7,7 +7,6 @@ public static class Dependencies
 {
     public static void ConfigureDatabase(IConfiguration configuration, IServiceCollection services)
     {
-        var connectionString = configuration[configuration["AZURE_SQL_CONNECTION_STRING"] ?? "ConnectionStrings:MyEshop"];
         bool useInMemoryDb = false;
         if (configuration["UseInMemoryDb"] != null)
         {

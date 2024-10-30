@@ -51,8 +51,6 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     {
         var query = AddDeletedFilter(_dbSet, includeDeleted);
 
-        //query = func != null ? func(query) : query;
-
         query = func?.Invoke(query) ?? query;
 
         return await query.ToListAsync();

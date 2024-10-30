@@ -4,12 +4,12 @@ namespace Ecom.Web.Infrastructure;
 
 public static class Util
 {
-    private static readonly JsonSerializerSettings SerializerSettings = new() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+    private static readonly JsonSerializerSettings _serializerSettings = new() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 
     public static string ToJson(this object value, bool format = true)
     {
         var formatting = format ? Formatting.Indented : Formatting.None;
-        return JsonConvert.SerializeObject(value, formatting, SerializerSettings);
+        return JsonConvert.SerializeObject(value, formatting, _serializerSettings);
     }
 
     public static T? FromJson<T>(this string? json)

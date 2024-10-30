@@ -14,7 +14,7 @@ public class HomeController(IProductService productService,
 
     public async Task<IActionResult> Index(string? category, int page = 1)
     {
-        var products = await productService.GetProducts(category, page, _pageSize);
+        var products = await productService.GetProductsAsync(category, page, _pageSize);
 
         var viewModel = new ProductListViewModel
         {
@@ -33,7 +33,7 @@ public class HomeController(IProductService productService,
 
     public async Task<IActionResult> Detail(int productId, string returnUrl)
     {
-        var product = await productService.GetProduct(productId);
+        var product = await productService.GetProductAsync(productId);
 
         var recommendations = await recommendationService.GetItemsFor(product);
 
