@@ -9,11 +9,14 @@ public class ProductService(IRepository<Product> productRepository) : IProductSe
 {
     public async Task<IPagedList<Product>> GetProductsAsync(string? category, int page, int pageSize)
     {
-        return await productRepository.GetAllPagedAsync(
+        var pagedProducts = await productRepository.GetAllPagedAsync(
             query => query.Include(x => x.Images).Where(p => category == null || p.Category == category).OrderBy(p => p.Id),
             pageIndex: page,
             pageSize: pageSize,
-            includeDeleted: false);
+            includeDeleted: false
+            );
+
+        return pagedProducts;
     }
 
     public async Task<Product> GetProductAsync(int id)

@@ -6,7 +6,7 @@ namespace Ecom.Web.Infrastructure
 {
     public static class SeedData
     {
-        private static Random _rand = new();
+        private static Random _rand = Random.Shared;
 
         public static void Populate(IApplicationBuilder app)
         {
@@ -34,7 +34,7 @@ namespace Ecom.Web.Infrastructure
                         Price = 27.99m,
                         Images = [new Image {
                             IsMainImage = true,
-                            ImageUrl = "https://images.jane.com/sellers/limeberry-designs/product-images/game-day-blue-fb-sw.jpg?preset=xlarge"
+                            ImageUrl = SetProductImageUri("game-day-blue-fb-sw.jpg?preset=xlarge")
                         }]
                     },
                      new Product
@@ -47,7 +47,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 48.95m,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/gilbert-girls-boutique/product-images/2094762_square.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("2094762_square.jpg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -67,7 +67,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 19.50m,
                          Images = [new Image{
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/printed-peach/product-images/happy-turkey-day-trendy-fall-thanksgiving-family-festive-autumn-orange-bella-canvas-tee.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("happy-turkey-day-trendy-fall-thanksgiving-family-festive-autumn-orange-bella-canvas-tee.jpg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -82,7 +82,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 34.95m,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/johnny-threads/product-images/itgetsworsemens.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("itgetsworsemens.jpg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -95,7 +95,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 19m,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/limeberry-designs/product-images/tis-season-ti-be-jolly-sw.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("tis-season-ti-be-jolly-sw.jpg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -110,7 +110,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 16,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/shop-suey-boutique/product-images/8051766722839.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("8051766722839.jpg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -125,7 +125,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 29.95m,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/funky-monkey-fashion-accessories/product-images/AriaTortiseHoop.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("AriaTortiseHoop.jpg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -143,7 +143,7 @@ namespace Ecom.Web.Infrastructure
                          Price = 8.99m,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/mrs-little-shoppe-llc/product-images/Bazaart_20241008_050716_901.jpeg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("Bazaart_20241008_050716_901.jpeg?preset=xlarge")
                          }]
                      },
                      new Product
@@ -156,7 +156,60 @@ namespace Ecom.Web.Infrastructure
                          Price = 16.99m,
                          Images = [new Image {
                              IsMainImage = true,
-                             ImageUrl = "https://images.jane.com/sellers/shop-suey-boutique/product-images/9083056292119.jpg?preset=xlarge"
+                             ImageUrl = SetProductImageUri("9083056292119.jpg?preset=xlarge")
+                         }]
+                     },
+                     new Product
+                     {
+                         Name = "Homebody Sweatshirt",
+                         Sku = $"PE{_rand.Next(x, 500)}",
+                         ShortDescription = "This cute and trendy sweatshirt is the perfect addition to your wardrobe!",
+                         FullDescription = """
+                         Made with high-quality materials and professionally printed on a unisex fit sweatshirt. You'll stay comfy and trendy all season long!
+                         SIZING :
+                         - Please refer to size chart on the listing photos for a detailed sizing chart with measurements.
+                         - Unisex sizing.
+                         - If you are seeking an oversize look be sure to order 1 size up from your regular size.
+                         """,
+                         Category = "Earrings",
+                         Price = 26.99m,
+                         Images = [new Image {
+                             IsMainImage = true,
+                             ImageUrl = SetProductImageUri("homebody-new-ckJPG4.jpg?preset=medium_sq")
+                         }]
+                     },
+                     new Product
+                     {
+                         Name = "Staying Alive Sweatshirt / Funny Sweater / Coffee Lover",
+                         Sku = $"PE{_rand.Next(x, 500)}",
+                         ShortDescription = "This cute and fun sweatshirt is the perfect addition to your wardrobe!",
+                         FullDescription = """
+                         Made with high-quality materials and professionally printed on a unisex fit sweatshirt. You'll stay comfy and trendy all season long!
+                         SIZING :
+                         - Please refer to size chart on the listing photos for a detailed sizing chart with measurements.
+                         - Unisex sizing.
+                         - If you are seeking an oversize look be sure to order 1 size up from your regular size.
+                         """,
+                         Category = "Earrings",
+                         Price = 26.99m,
+                         Images = [new Image {
+                             IsMainImage = true,
+                             ImageUrl = SetProductImageUri("staying-alive-47-8CAB-0B182A0F32A2.jpg?preset=large")
+                         }]
+                     },
+                     new Product
+                     {
+                         Name = "Ho Ho Ho Santa - Toddler Sweatshirt",
+                         Sku = $"PE{_rand.Next(x, 500)}",
+                         ShortDescription = "Get your little one in the holiday spirit with our \"Ho Ho Ho Santa\" Toddler Sweatshirt!",
+                         FullDescription = """
+                         Perfect for festive family gatherings or cozy days at home, this sweatshirt is designed with a cheerful Santa graphic and the classic "Ho Ho Ho" text. Made from a soft cotton blend for ultimate comfort, it's available in sizes 2T to 5/6T to ensure the perfect fit. Easy to care for—machine washable and tumble dry low. This adorable sweatshirt is a must-have for the holiday season!
+                         """,
+                         Category = "Earrings",
+                         Price = 26.99m,
+                         Images = [new Image {
+                             IsMainImage = true,
+                             ImageUrl = SetProductImageUri("HoHoHoSanta_2_8677db1d-de22-4fc8-a4e5-21bf55ba06c7_800x.jpg")
                          }]
                      }
                 }));
@@ -165,9 +218,7 @@ namespace Ecom.Web.Infrastructure
             }
         }
 
-        public static void SaveProductWithImages(ApplicationDbContext context, Image image, Product p)
-        {
+        private static string SetProductImageUri(string fileName) => $"images/products/{fileName}";
 
-        }
     }
 }
