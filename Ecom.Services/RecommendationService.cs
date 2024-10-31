@@ -1,5 +1,6 @@
 ﻿using Ecom.Core.Domain;
 using Ecom.Data;
+using Ecom.Services.Interfaces;
 
 namespace Ecom.Services;
 

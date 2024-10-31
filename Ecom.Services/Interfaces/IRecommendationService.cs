@@ -1,6 +1,6 @@
 ﻿using Ecom.Core.Domain;
 
-namespace Ecom.Services;
+namespace Ecom.Services.Interfaces;
 
 public interface IRecommendationService
 {

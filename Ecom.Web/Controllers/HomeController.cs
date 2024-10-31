@@ -1,4 +1,4 @@
-﻿using Ecom.Services;
+﻿using Ecom.Services.Interfaces;
 using Ecom.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

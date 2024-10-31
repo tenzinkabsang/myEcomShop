@@ -11,11 +11,11 @@
     </a>
     <div class="card-body p-0 pt-2">
 
-        <h5 class="card-title">@Model.Price.ToString("c")</h5>
+        <h5 class="card-title">$@Model.Price.ToString()</h5>
 
-        <p class="card-text mb-0 text-center">
+        <p class="card-text mb-0">
             <a asp-action="Detail" asp-controller="Home" asp-route-productId="@Model.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
-               class="pt-2 float-end icon-hover" style="text-decoration: none;color: black;">
+               class="pt-2 icon-hover" style="text-decoration: none;color: black;">
                 @Model.Name
             </a>
         </p>

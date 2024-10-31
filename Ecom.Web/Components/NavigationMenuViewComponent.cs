@@ -1,4 +1,4 @@
-﻿using Ecom.Services;
+﻿using Ecom.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.Web.Components;

@@ -12,6 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<Image> Images => Set<Image>();
     public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<ShoppingCartItem> ShoppingCartItems => Set<ShoppingCartItem>();
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

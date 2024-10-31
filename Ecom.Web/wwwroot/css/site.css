@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -28,4 +28,19 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}*/
+
+
+.icon-hover:hover {
+    border-color: #3b71ca !important;
+    background-color: white !important;
+}
+
+    .icon-hover:hover i {
+        color: #3b71ca !important;
+    }
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #b39c9c;
+    background-color: #0d6efd;
 }

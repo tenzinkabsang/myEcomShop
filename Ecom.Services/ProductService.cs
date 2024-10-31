@@ -1,6 +1,7 @@
 ﻿using Ecom.Core;
 using Ecom.Core.Domain;
 using Ecom.Data;
+using Ecom.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecom.Services;
@@ -29,10 +30,11 @@ public class ProductService(IRepository<Product> productRepository) : IProductSe
         return product;
     }
 
-    public async Task<List<string>> GetAllCategoriesAsync()
+    public async Task<IList<string>> GetAllCategoriesAsync()
     {
-        return (await productRepository.GetAllAsync(query => query.DistinctBy(p => p.Category)))
+        return (await productRepository.GetAllAsync())
             .Select(p => p.Category)
+            .Distinct()
             .OrderBy(x => x)
             .ToList();
     }

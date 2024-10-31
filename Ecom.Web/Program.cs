@@ -1,6 +1,7 @@
 ﻿using Ecom.Core.Events;
 using Ecom.Data;
 using Ecom.Services;
+using Ecom.Services.Interfaces;
 using Ecom.Web.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
