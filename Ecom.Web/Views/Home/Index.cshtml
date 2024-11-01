@@ -7,7 +7,7 @@
                 <div class="row">
                     <vc:navigation-menu />
                     <div class="col-lg-9">
-                        <div class="card-banner h-auto p-5 bg-primary rounded-5" style="height: 350px;">
+                        <div class="card-banner h-auto p-5 bg-primary" style="height: 350px;">
                             <div>
                                 <h2 class="text-white">
                                     Great products with <br />
@@ -31,7 +31,7 @@
 
     @foreach (var p in Model.Products)
     {
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-lg-4 col-md-6 col-sm-6">
             <partial name="_ProductSummary" model="p" />
         </div>
     }

@@ -47,7 +47,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     }
 
 
-    public async Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? func = null, bool includeDeleted = true)
+    public async Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? func = null, bool includeDeleted = false)
     {
         var query = AddDeletedFilter(_dbSet, includeDeleted);
 
@@ -57,7 +57,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     }
 
     public virtual async Task<IPagedList<TEntity>> GetAllPagedAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? func = null,
-           int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false, bool includeDeleted = true)
+           int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false, bool includeDeleted = false)
     {
         var query = AddDeletedFilter(_dbSet, includeDeleted);
 
@@ -66,17 +66,18 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
         return await query.ToPagedListAsync(pageIndex, pageSize, getOnlyTotalCount);
     }
 
-    public async Task<TEntity?> GetByIdAsync(int id, bool includeDeleted = true)
+    public async Task<TEntity?> GetByIdAsync(int id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? func = null, bool includeDeleted = false)
     {
-        var query = AddDeletedFilter(_dbSet, includeDeleted);
-        return await query.FirstOrDefaultAsync(entity => entity.Id == id);
+        var query = func != null ? func(_dbSet) : _dbSet;
+
+        return await AddDeletedFilter(query, includeDeleted).FirstOrDefaultAsync(entity => entity.Id == id);
     }
 
-    public async Task<IList<TEntity>> GetByIdsAsync(IList<int> ids, bool includeDeleted = true)
+    public async Task<IList<TEntity>> GetByIdsAsync(IList<int> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>>? func = null, bool includeDeleted = false)
     {
-        var query = AddDeletedFilter(_dbSet, includeDeleted);
+        var query = func != null ? func(_dbSet) : _dbSet;
 
-        var entries = await query.Where(entry => ids.Contains(entry.Id)).ToListAsync();
+        var entries = await AddDeletedFilter(query, includeDeleted).Where(entry => ids.Contains(entry.Id)).ToListAsync();
 
         return entries;
     }

@@ -19,4 +19,15 @@ services:
       - MSSQL_SA_PASSWORD=@Password1234
     volumes:
       - sqlserver_data:/var/opt/mssql
+
+  myecomshop.seq:
+   image: datalust/seq:latest
+   container_name: myEcomShop.Seq
+   volumes:
+     - ./.containers/seq:/data 
+   environment:
+     - ACCEPT_EULA=Y
+   ports:
+     - 5341:5341 
+     - 5342:80
   

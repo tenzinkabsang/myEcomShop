@@ -3,19 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ecom.Web.Models;
 
-public class ProductViewModel
+public record ProductViewModel
 {
     public int Id { get; set; }
 
     [Required]
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required]
-    public required string Description { get; set; }
+    public string ShortDescription { get; set; } = string.Empty;
 
+    public string? FullDescription { get; set; }
+
+    [Required]
+    public string Sku { get; set; } = string.Empty;
+
+    [Required]
     public decimal Price { get; set; }
 
-    public required string Category { get; set; }
+    [Required]
+    public string Category { get; set; } = string.Empty;
 
     public IList<Image> Images { get; set; } = [];
 }

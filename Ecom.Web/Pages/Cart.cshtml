@@ -1,0 +1,77 @@
+﻿@page
+@using Ecom.Web.Models;
+@model Ecom.Web.Pages.CartModel
+@{
+}
+
+<h2>Your cart</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model?.Cart?.CartItems ?? Enumerable.Empty<LineItem>())
+        {
+            <tr>
+                <td class="text-center">
+                    <div class="d-flex justify-content-center mb-3">
+                        <a asp-action="Detail" asp-controller="Home" asp-route-productId="@item.Product.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()" class="item-thumb">
+                            <img width="60" height="60" class="rounded-2" src="@item.MainImageUrl" />
+                        </a>
+                        @* 
+                        <a asp-action="Detail" asp-controller="Home" asp-route-productId="@Model.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+                           class="pt-2 float-end icon-hover" style="text-decoration: none;color: black;">
+                            @Model.Name
+                        </a>
+                    *@
+
+                    </div>
+                </td>
+
+                <td class="text-left">@item.Product.Name</td>
+                <td class="text-center">@item.Quantity</td>
+                <td class="text-right">@item.Product.Price.ToString("c")</td>
+                <td class="text-right">
+                    @item.Total.ToString("c")
+                </td>
+                <td class="text-center">
+                    <form asp-page-handler="Remove" method="post">
+                        <input type="hidden" name="productId" value="@item.Product.Id" />
+                        <input type="hidden" name="returnUrl" value="@Model?.ReturnUrl" />
+                        <button type="submit" class="btn btn-light border border-secondary py-2 icon-hover px-3">
+                            Remove
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Total:</td>
+            <td class="text-right">
+                @Model?.Cart?.CartTotal.ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div class="text-center">
+
+    @if (Model?.Cart.IsEmpty ?? true)
+    {
+        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" href="@Model?.ReturnUrl">
+            Your shopping cart is empty! Good stuff goes in here.
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" href="@Model?.ReturnUrl">Continue Shopping</a>
+        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" asp-action="Checkout" asp-controller="Order">Checkout</a>
+    }
+</div>

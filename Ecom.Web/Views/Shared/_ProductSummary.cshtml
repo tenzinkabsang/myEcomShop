@@ -1,8 +1,9 @@
-﻿@model Product
+﻿@model ProductViewModel
 
 @{
-    string mainImageUrl = Model.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? "";
-    int quantityPlaceHolderForNow = new Random().Next(4, 25);
+    string imagePath = Model.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? "";
+    string mainImageUrl = ViewContext.HttpContext.Request.ImageUrl(imagePath);
+    int quantityPlaceHolderForNow = Random.Shared.Next(5, 50);
 }
 
 <div class="card my-2 shadow-0">

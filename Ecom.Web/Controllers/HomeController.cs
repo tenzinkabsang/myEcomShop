@@ -1,4 +1,5 @@
-﻿using Ecom.Services.Interfaces;
+﻿using AutoMapper;
+using Ecom.Services.Interfaces;
 using Ecom.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ namespace Ecom.Web.Controllers;
 public class HomeController(IProductService productService,
     IRecommendationService recommendationService,
     IConfiguration config,
+    IMapper mapper,
     ILogger<HomeController> logger) : Controller
 {
     private readonly int _pageSize = config.GetValue<int>("Home:PageSize");
@@ -18,7 +20,7 @@ public class HomeController(IProductService productService,
 
         var viewModel = new ProductListViewModel
         {
-            Products = [.. products],
+            Products = products.Select(mapper.Map<ProductViewModel>).ToList(),
             PagingInfo = new PagingInfo
             {
                 CurrentPage = page,
@@ -33,15 +35,17 @@ public class HomeController(IProductService productService,
 
     public async Task<IActionResult> Detail(int productId, string returnUrl)
     {
+        logger.LogInformation("Getting product detail for {ProductId}", productId);
+
         var product = await productService.GetProductAsync(productId);
 
         var recommendations = await recommendationService.GetItemsFor(product);
 
         var viewModel = new ProductDetailViewModel
         {
-            Product = product,
+            Product = mapper.Map<ProductViewModel>(product),
             ReturnUrl = returnUrl,
-            RecommendedItems = recommendations
+            RecommendedItems = recommendations.Select(mapper.Map<ProductViewModel>).ToList()
         };
 
         return View(viewModel);

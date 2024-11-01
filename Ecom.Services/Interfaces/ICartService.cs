@@ -8,5 +8,5 @@ public interface ICartService
 
     Task<int> AddItem(int customerId, int productId, int quantity);
 
-    Task DeleteItem(int shoppingCartItemId);
+    Task RemoveItem(int shoppingCartItemId);
 }

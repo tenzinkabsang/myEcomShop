@@ -3,6 +3,8 @@ namespace Ecom.Core.Domain;
 
 public class Customer : BaseEntity, ISoftDeletedEntity, IAuditableEntity
 {
+    public Guid? CustomerGuid { get; set; }
+
     public string Username { get; set; } = string.Empty;
 
     public string Email { get; set; } = string.Empty;

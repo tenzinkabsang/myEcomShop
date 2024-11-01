@@ -3,10 +3,8 @@
 public class ShoppingCartItem : BaseEntity, IAuditableEntity, ISoftDeletedEntity
 {
     public int CustomerId { get; set; }
-    public Customer Customer { get; set; } = new();
 
     public int ProductId { get; set; }
-    public Product Product { get; set; } = new();
 
     public string ProductAttributesXml { get; set; } = string.Empty;
 
