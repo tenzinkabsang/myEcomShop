@@ -47,6 +47,7 @@ public class CartModel(IProductService productService,
 
         // Add cartItem to database.
         await cartService.AddItem(customer.CustomerId, productId, quantity: 1);
+
         return RedirectToPage(new { returnUrl });
     }
 
@@ -60,6 +61,8 @@ public class CartModel(IProductService productService,
             //var product = await productService.GetProductAsync(cartItem.ProductId);
             //Cart.RemoveLine(mapper.Map<ProductViewModel>(product));
             await cartService.RemoveItem(cartItem.Id);
+
+            logger.LogInformation("{ShoppingCartItemId} removed for {Customer}", cartItem.Id, customer.ToJson());
         }
 
         return RedirectToPage(new { returnUrl });
