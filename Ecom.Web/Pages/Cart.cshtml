@@ -36,9 +36,9 @@
 
                 <td class="text-left">@item.Product.Name</td>
                 <td class="text-center">@item.Quantity</td>
-                <td class="text-right">@item.Product.Price.ToString("c")</td>
+                <td class="text-right">$@item.Product.Price.ToString()</td>
                 <td class="text-right">
-                    @item.Total.ToString("c")
+                    $@item.Total.ToString()
                 </td>
                 <td class="text-center">
                     <form asp-page-handler="Remove" method="post">
@@ -56,7 +56,7 @@
         <tr>
             <td colspan="3" class="text-right">Total:</td>
             <td class="text-right">
-                @Model?.Cart?.CartTotal.ToString("c")
+                $@Model?.Cart?.CartTotal.ToString()
             </td>
         </tr>
     </tfoot>
