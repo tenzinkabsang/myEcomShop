@@ -6,9 +6,48 @@ services:
     build:
       context: .
       dockerfile: Ecom.Web/Dockerfile
+    ports:
+      - "5200:8080"
+      - "5201:8081"
+    depends_on:
+      - "ecom.catalog.api"
+      - "ecom.orders.api"
+      - "myecomshop.seq"
+
+  ecom.catalog.api:
+    image: ${DOCKER_REGISTRY-}ecomcatalogapi
+    build:
+      context: .
+      dockerfile: Ecom.Catalog.Api/Dockerfile
+    ports:
+      - "5011:8080"
     depends_on:
       - "ecom.database"
-  
+      - "myecomshop.seq"
+
+  ecom.orders.api:
+    image: ${DOCKER_REGISTRY-}ecomordersapi
+    build:
+      context: .
+      dockerfile: Ecom.Orders.Api/Dockerfile
+    ports:
+      - "5012:8080"
+    depends_on:
+      - "ecom.database"
+      - "rabbit_local"
+      - "myecomshop.seq"
+      - "ecom.queueprocessor"
+
+  ecom.queueprocessor:
+    image: ${DOCKER_REGISTRY-}ecomqueueprocessor
+    build:
+      context: .
+      dockerfile: Ecom.QueueProcessor/Dockerfile
+    depends_on:
+      - "rabbit_local"
+      - "ecom.database"
+      - "myecomshop.seq"
+
   ecom.database:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: ecom.database
@@ -30,4 +69,13 @@ services:
    ports:
      - 5341:5341 
      - 5342:80
+
+  rabbit_local:
+   image: rabbitmq:3-management
+   ports:
+     - 8088:15672
   
+ 
+
+ 
+

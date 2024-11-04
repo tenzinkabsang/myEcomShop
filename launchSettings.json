@@ -4,7 +4,11 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "ecom.web": "StartDebugging"
+        "ecom.web": "StartDebugging",
+        "ecom.catalog.api": "StartDebugging",
+        "ecom.worker": "StartDebugging",
+        "ecom.queueprocessor": "StartDebugging",
+        "ecom.orders.api": "StartDebugging"
       }
     }
   }
