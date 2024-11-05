@@ -13,7 +13,15 @@ public class ProductService(IRepository<Product> productRepository, ILogger<Prod
         logger.LogInformation("Retrieving products for {Category}", category);
 
         var pagedProducts = await productRepository.GetAllPagedAsync(
-            query => query.Include(x => x.Images).Where(p => category == null || p.Category == category).OrderBy(p => p.Id),
+            query => query
+                // Load images with products
+                .Include(x => x.Images)
+
+                // Filter with category if provided
+                .Where(p => category == null || p.Category == category)
+                
+                // Todo: Implement ordering based on user history (items favorited, viewed, etc.)
+                .OrderBy(p => Guid.NewGuid()),
             pageIndex: page,
             pageSize: pageSize
             );

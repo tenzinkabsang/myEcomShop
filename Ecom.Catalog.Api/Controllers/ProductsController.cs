@@ -1,6 +1,5 @@
 ﻿using Ecom.Catalog.Api.Dtos;
 using Ecom.Catalog.Api.Services;
-using Ecom.Core;
 using Ecom.Core.Domain;
 using Microsoft.AspNetCore.Mvc;
 
