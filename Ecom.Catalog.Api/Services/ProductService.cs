@@ -21,7 +21,7 @@ public class ProductService(IRepository<Product> productRepository, ILogger<Prod
                 .Where(p => category == null || p.Category == category)
                 
                 // Todo: Implement ordering based on user history (items favorited, viewed, etc.)
-                .OrderBy(p => Guid.NewGuid()),
+                .OrderBy(p => p.Id),
             pageIndex: page,
             pageSize: pageSize
             );
