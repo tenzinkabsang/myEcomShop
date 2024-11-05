@@ -22,3 +22,4 @@ public static class UrlExtensions
         return $"{uriBuilder.Uri.AbsoluteUri}{imagePath}";
     }
 }
+

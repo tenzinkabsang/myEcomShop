@@ -16,16 +16,16 @@ public class HomeController(ICatalogApiClient catalogApiClient,
 
     public async Task<IActionResult> Index(string? category, int page = 1)
     {
-        var products = await catalogApiClient.GetProductsAsync(page, _pageSize, category);
+        var result = await catalogApiClient.GetProductsAsync(page, _pageSize, category);
 
         var viewModel = new ProductListViewModel
         {
-            Products = products.Select(mapper.Map<ProductViewModel>).ToList(),
+            Products = result.Products.Select(mapper.Map<ProductViewModel>).ToList(),
             PagingInfo = new PagingInfo
             {
                 CurrentPage = page,
                 ItemsPerPage = _pageSize,
-                TotalItems = products.TotalCount
+                TotalItems = result.TotalCount
             },
             CurrentCategory = category
         };

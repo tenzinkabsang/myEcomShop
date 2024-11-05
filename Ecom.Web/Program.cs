@@ -1,9 +1,11 @@
 ﻿using Ecom.Core.Events;
 using Ecom.Data;
+using Ecom.Web.Configuration;
 using Ecom.Web.Infrastructure;
 using Ecom.Web.Models;
 using Ecom.Web.Services;
 using Ecom.Web.Services.Interfaces;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +25,23 @@ if(!string.IsNullOrWhiteSpace(connectionString))
 else
     builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddHttpClient<ICatalogApiClient, CatalogApiClient>();
-builder.Services.AddHttpClient<IRecommendationApiClient, CatalogApiClient>();
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection(nameof(ApiSettings)));
+builder.Services.AddHttpClient<ICatalogApiClient, CatalogApiClient>((sp, client) =>
+{
+    var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
+    client.BaseAddress = new Uri(settings.CatalogApiBaseAddress);
+});
+
+
+builder.Services.AddHttpClient<IRecommendationApiClient, CatalogApiClient>((sp, client) =>
+{
+    var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
+
+    client.BaseAddress = new Uri(settings.CatalogApiBaseAddress);
+});
+
+
+
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPublisher(sp));

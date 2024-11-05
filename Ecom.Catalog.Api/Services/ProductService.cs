@@ -3,7 +3,6 @@ using Ecom.Core;
 using Ecom.Core.Domain;
 using Ecom.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Ecom.Services;
 

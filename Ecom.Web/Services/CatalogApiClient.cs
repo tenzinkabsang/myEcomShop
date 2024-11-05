@@ -1,5 +1,5 @@
 ﻿using Ecom.Core.Domain;
-using Ecom.Core;
+using Ecom.Web.Services.Dtos;
 using Ecom.Web.Services.Interfaces;
 
 namespace Ecom.Web.Services;
@@ -13,21 +13,21 @@ public class CatalogApiClient : ICatalogApiClient, IRecommendationApiClient
         _httpClient = httpClient;
     }
 
-    public async Task<IPagedList<Product>> GetProductsAsync(int page, int pageSize, string? category)
+    public async Task<(int TotalCount, IList<Product> Products)> GetProductsAsync(int page, int pageSize, string? category)
     {
-        var pagedProducts = await _httpClient
-            .GetFromJsonAsync<IPagedList<Product>>($"products?page={page}&pageSize={pageSize}&category={category}");
+        var response = await _httpClient
+            .GetFromJsonAsync<GetProductsResponse>($"products?page={page}&pageSize={pageSize}&category={category}");
 
-        if (pagedProducts is null)
-            throw new Exception("Unable to retrieve products.");
+        if (response is null)
+            throw new Exception("Unable to find products for the given category");
 
-        return pagedProducts;
+        return (response.TotalCount, response.Products);
     }
 
     public async Task<Product> GetProductAsync(int id)
     {
         var product = await _httpClient.GetFromJsonAsync<Product>($"products/{id}");
-        
+
         if (product is null)
             throw new ArgumentNullException($"No product found for id: {id}");
 
