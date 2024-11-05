@@ -116,7 +116,7 @@ namespace Ecom.Data.Migrations
                     b.Property<bool>("IsMainImage")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -271,6 +271,10 @@ namespace Ecom.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
+
                     b.ToTable("ShoppingCartItems");
                 });
 
@@ -287,13 +291,9 @@ namespace Ecom.Data.Migrations
 
             modelBuilder.Entity("Ecom.Core.Domain.Image", b =>
                 {
-                    b.HasOne("Ecom.Core.Domain.Product", "Product")
+                    b.HasOne("Ecom.Core.Domain.Product", null)
                         .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Ecom.Core.Domain.Order", b =>
@@ -320,6 +320,21 @@ namespace Ecom.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ecom.Core.Domain.ShoppingCartItem", b =>
+                {
+                    b.HasOne("Ecom.Core.Domain.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecom.Core.Domain.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ecom.Core.Domain.Order", b =>

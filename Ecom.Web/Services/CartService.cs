@@ -1,9 +1,9 @@
-﻿using Ecom.Core.Domain;
+﻿using Ecom.Core;
+using Ecom.Core.Domain;
 using Ecom.Data;
-using Ecom.Services.Interfaces;
-using Microsoft.Extensions.Logging;
+using Ecom.Web.Services.Interfaces;
 
-namespace Ecom.Services;
+namespace Ecom.Web.Services;
 
 public class CartService : ICartService
 {
@@ -21,15 +21,18 @@ public class CartService : ICartService
         var existingCartItem = (await GetShoppingCartItems(customerId))
             .FirstOrDefault(c => c.ProductId == productId);
 
-        if(existingCartItem != null)
+
+        if (existingCartItem != null)
         {
             existingCartItem.Quantity += quantity;
             await _cartRepository.UpdateAsync(existingCartItem);
+            _logger.LogInformation("{Cart} updated", existingCartItem.ToJson());
             return existingCartItem.Id;
         }
 
         var cartItem = new ShoppingCartItem { CustomerId = customerId, ProductId = productId, Quantity = quantity, ReserveInCartEndDateUtc = DateTime.UtcNow.AddMinutes(30) };
         await _cartRepository.InsertAsync(cartItem);
+        _logger.LogInformation("{Cart} added", cartItem.ToJson());
         return cartItem.Id;
     }
 
@@ -40,7 +43,7 @@ public class CartService : ICartService
 
     public async Task<IList<ShoppingCartItem>> GetShoppingCartItems(int customerId)
     {
-        var shoppingCartItems = await _cartRepository.GetAllAsync(sc => 
+        var shoppingCartItems = await _cartRepository.GetAllAsync(sc =>
                 sc.Where(x => x.CustomerId == customerId && DateTime.UtcNow <= x.ReserveInCartEndDateUtc));
 
         return shoppingCartItems;

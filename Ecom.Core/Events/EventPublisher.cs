@@ -1,7 +1,6 @@
-﻿using Ecom.Core.Events;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Ecom.Services;
+namespace Ecom.Core.Events;
 
 public sealed class EventPublisher : IEventPublisher
 {

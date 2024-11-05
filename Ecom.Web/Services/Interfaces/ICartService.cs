@@ -1,6 +1,6 @@
 ﻿using Ecom.Core.Domain;
 
-namespace Ecom.Services.Interfaces;
+namespace Ecom.Web.Services.Interfaces;
 
 public interface ICartService
 {

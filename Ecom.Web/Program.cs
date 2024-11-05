@@ -1,9 +1,9 @@
 ﻿using Ecom.Core.Events;
 using Ecom.Data;
-using Ecom.Services;
-using Ecom.Services.Interfaces;
 using Ecom.Web.Infrastructure;
 using Ecom.Web.Models;
+using Ecom.Web.Services;
+using Ecom.Web.Services.Interfaces;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +23,8 @@ if(!string.IsNullOrWhiteSpace(connectionString))
 else
     builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddScoped<IRecommendationService, RecommendationService>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddHttpClient<ICatalogApiClient, CatalogApiClient>();
+builder.Services.AddHttpClient<IRecommendationApiClient, CatalogApiClient>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPublisher(sp));
@@ -92,5 +92,4 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-SeedData.Populate(app);
 app.Run();

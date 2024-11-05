@@ -1,4 +1,4 @@
-﻿using Ecom.Services;
+﻿using Ecom.Core;
 
 namespace Ecom.Web.Infrastructure;
 

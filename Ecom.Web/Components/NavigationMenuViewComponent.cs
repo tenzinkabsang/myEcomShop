@@ -1,13 +1,13 @@
-﻿using Ecom.Services.Interfaces;
+﻿using Ecom.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.Web.Components;
 
-public class NavigationMenuViewComponent(IProductService productService) : ViewComponent
+public class NavigationMenuViewComponent(ICatalogApiClient catalogApiClient) : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var categories = await productService.GetAllCategoriesAsync();
+        var categories = await catalogApiClient.GetAllCategoriesAsync();
         ViewBag.SelectedCategory = RouteData?.Values["category"];
         return View(categories);
     }

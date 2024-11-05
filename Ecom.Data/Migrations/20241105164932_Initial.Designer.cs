@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241025185306_AddedCustomerReally")]
-    partial class AddedCustomerReally
+    [Migration("20241105164932_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,6 +68,9 @@ namespace Ecom.Data.Migrations
                     b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CustomerGuid")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
@@ -90,9 +93,6 @@ namespace Ecom.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ShippingAddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -100,8 +100,6 @@ namespace Ecom.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BillingAddressId");
-
-                    b.HasIndex("ShippingAddressId");
 
                     b.ToTable("Customers");
                 });
@@ -121,7 +119,7 @@ namespace Ecom.Data.Migrations
                     b.Property<bool>("IsMainImage")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -241,6 +239,48 @@ namespace Ecom.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Ecom.Core.Domain.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProductAttributesXml")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReserveInCartEndDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
             modelBuilder.Entity("Ecom.Core.Domain.Customer", b =>
                 {
                     b.HasOne("Ecom.Core.Domain.Address", "BillingAddress")
@@ -249,26 +289,14 @@ namespace Ecom.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ecom.Core.Domain.Address", "ShippingAddress")
-                        .WithMany()
-                        .HasForeignKey("ShippingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("BillingAddress");
-
-                    b.Navigation("ShippingAddress");
                 });
 
             modelBuilder.Entity("Ecom.Core.Domain.Image", b =>
                 {
-                    b.HasOne("Ecom.Core.Domain.Product", "Product")
+                    b.HasOne("Ecom.Core.Domain.Product", null)
                         .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Ecom.Core.Domain.Order", b =>
@@ -295,6 +323,21 @@ namespace Ecom.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Ecom.Core.Domain.ShoppingCartItem", b =>
+                {
+                    b.HasOne("Ecom.Core.Domain.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecom.Core.Domain.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ecom.Core.Domain.Order", b =>

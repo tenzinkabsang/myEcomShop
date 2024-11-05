@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Ecom.Services.Interfaces;
 using Ecom.Web.Models;
+using Ecom.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Ecom.Web.Controllers;
 
-public class HomeController(IProductService productService,
-    IRecommendationService recommendationService,
+public class HomeController(ICatalogApiClient catalogApiClient,
+    IRecommendationApiClient recommendationApiClient,
     IConfiguration config,
     IMapper mapper,
     ILogger<HomeController> logger) : Controller
@@ -16,7 +16,7 @@ public class HomeController(IProductService productService,
 
     public async Task<IActionResult> Index(string? category, int page = 1)
     {
-        var products = await productService.GetProductsAsync(category, page, _pageSize);
+        var products = await catalogApiClient.GetProductsAsync(page, _pageSize, category);
 
         var viewModel = new ProductListViewModel
         {
@@ -37,15 +37,17 @@ public class HomeController(IProductService productService,
     {
         logger.LogInformation("Getting product detail for {ProductId}", productId);
 
-        var product = await productService.GetProductAsync(productId);
+        var productTask = catalogApiClient.GetProductAsync(productId);
+        var recommendationsTask = recommendationApiClient.GetRecommendations(productId);
 
-        var recommendations = await recommendationService.GetItemsFor(product);
+        await Task.WhenAll(productTask, recommendationsTask);
 
         var viewModel = new ProductDetailViewModel
         {
-            Product = mapper.Map<ProductViewModel>(product),
+            Product = mapper.Map<ProductViewModel>(productTask.Result),
             ReturnUrl = returnUrl,
-            RecommendedItems = recommendations.Select(mapper.Map<ProductViewModel>).ToList()
+            RecommendedItems = recommendationsTask.Result
+                                .Select(mapper.Map<ProductViewModel>).ToList()
         };
 
         return View(viewModel);

@@ -1,7 +1,7 @@
-﻿using Ecom.Core;
+﻿using Ecom.Catalog.Api.Services;
+using Ecom.Core;
 using Ecom.Core.Domain;
 using Ecom.Data;
-using Ecom.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -9,7 +9,7 @@ namespace Ecom.Services;
 
 public class ProductService(IRepository<Product> productRepository, ILogger<ProductService> logger) : IProductService
 {
-    public async Task<IPagedList<Product>> GetProductsAsync(string? category, int page, int pageSize)
+    public async Task<IPagedList<Product>> GetProductsAsync(int page, int pageSize, string? category)
     {
         logger.LogInformation("Retrieving products for {Category}", category);
 

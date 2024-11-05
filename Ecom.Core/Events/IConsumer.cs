@@ -1,4 +1,4 @@
-﻿namespace Ecom.Services.Interfaces;
+﻿namespace Ecom.Core.Events;
 
 /// <summary>
 /// Consumer interface

@@ -29,7 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Ecom.Core\Ecom.Core.csproj" />
     <ProjectReference Include="..\Ecom.Data\Ecom.Data.csproj" />
-    <ProjectReference Include="..\Ecom.Services\Ecom.Services.csproj" />
   </ItemGroup>
 
 </Project>

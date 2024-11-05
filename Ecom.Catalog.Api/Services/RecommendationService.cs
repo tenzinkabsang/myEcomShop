@@ -1,17 +1,18 @@
-﻿using Ecom.Core.Domain;
+﻿using Ecom.Core;
+using Ecom.Core.Domain;
 using Ecom.Data;
-using Ecom.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
-namespace Ecom.Services;
+namespace Ecom.Catalog.Api.Services;
 
 public sealed class RecommendationService(IRepository<Product> productRepository, ILogger<RecommendationService> logger) : IRecommendationService
 {
     private const int ITEM_COUNT = 5;
 
-    public async Task<IList<Product>> GetItemsFor(Product product)
+    public async Task<IList<Product>> GetRecommendations(int productId)
     {
+        var product = await productRepository.GetByIdAsync(productId);
+
         logger.LogInformation("Getting recommendentaions for {Product}", product.ToJson());
         return await productRepository.GetAllAsync(
             query => query

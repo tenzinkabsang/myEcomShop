@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Ecom.Services;
-using Ecom.Services.Interfaces;
+using Ecom.Core;
 using Ecom.Web.Models;
+using Ecom.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Ecom.Web.Pages;
 
-public class CartModel(IProductService productService, 
+public class CartModel(ICatalogApiClient catalogApiClient, 
     ICartService cartService,
     TestUser customer,
     IMapper mapper, 
@@ -30,7 +30,7 @@ public class CartModel(IProductService productService,
         Cart = new Cart();
         foreach (var c in cartItems)
         {
-            var p = await productService.GetProductAsync(c.ProductId);
+            var p = await catalogApiClient.GetProductAsync(c.ProductId);
             Cart.CartItems.Add(new LineItem
             {
                 CartLineId = c.Id,
