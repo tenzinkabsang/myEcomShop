@@ -1,12 +1,7 @@
 ﻿using Ecom.Core.Events;
 using Ecom.Data;
 using Ecom.Web.Configuration;
-using Ecom.Web.Infrastructure;
 using Ecom.Web.Models;
-using Ecom.Web.Services;
-using Ecom.Web.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,14 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.ConfigureDatabase(builder.Configuration);
 builder.Services.ConfigureCache(builder.Configuration);
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection(nameof(ApiSettings)));
-builder.Services.ConfigureHttpClients();
+builder.Services.ConfigureHttpApiClients();
 
-builder.Services.AddScoped<ICartService, CartService>();
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPublisher(sp));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -90,41 +86,3 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
-
-
-public static class ServiceCollectionExtensions
-{
-    public static void ConfigureHttpClients(this IServiceCollection services)
-    {
-        services.AddHttpClient<ICatalogApiClient, CatalogApiClient>((sp, client) =>
-        {
-            var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
-            client.BaseAddress = new Uri(settings.CatalogApiBaseAddress);
-        });
-
-        services.AddHttpClient<IRecommendationApiClient, CatalogApiClient>((sp, client) =>
-        {
-            var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
-
-            client.BaseAddress = new Uri(settings.CatalogApiBaseAddress);
-        });
-    }
-
-    public static void ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddDbContext<ApplicationDbContext>(opt =>
-        {
-            var connectionString = configuration[configuration["AZURE_SQL_CONNECTION_STRING"] ?? "ConnectionStrings:MyEshop"];
-            opt.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
-        });
-    }
-
-    public static void ConfigureCache(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionString = configuration[configuration["AZURE_REDIS_CONNECTION_STRING"] ?? "ConnectionStrings:Redis"];
-        if (!string.IsNullOrWhiteSpace(connectionString))
-            services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
-        else
-            services.AddDistributedMemoryCache();
-    }
-}

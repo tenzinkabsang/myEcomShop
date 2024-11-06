@@ -1,12 +1,14 @@
-﻿namespace Ecom.Orders.Api.Endpoints.ShoppingCart;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Ecom.Orders.Api.Endpoints.ShoppingCart;
 
 public static class ShoppingCartEndpoints
 {
     public static void MapShoppingCartEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("cart/items", async (int productId, int customerId, int quantity, ShoppingCartService cartService) =>
+        app.MapPost("cart/items", async ([FromBody] AddOrUpdateRequest data , ShoppingCartService cartService) =>
         {
-            var cartItem = await cartService.AddOrUpdateCartItem(customerId, productId, quantity);
+            var cartItem = await cartService.AddOrUpdateCartItem(data.CustomerId, data.ProductId, data.Quantity);
             return Results.Created($"cart/items/{cartItem.Id}", cartItem);
         });
 
@@ -28,6 +30,9 @@ public static class ShoppingCartEndpoints
             return cartItem is null ? Results.NotFound() : Results.Ok(cartItem);
         });
     }
+
+    private record AddOrUpdateRequest(int CustomerId, int ProductId, int Quantity);
 }
+
 
 

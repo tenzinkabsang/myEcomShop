@@ -12,7 +12,7 @@ public sealed class ShoppingCartService(FunDapperRepository repository, IMapper 
 
     public async Task<IList<ShoppingCartItemDto>> GetCartItems(int customerId)
     {
-        var items = await repository.GetShoppingCart(customerId);
+        var items = await repository.GetCartItems(customerId);
         return mapper.Map<IList<ShoppingCartItemDto>>(items);
     }
 

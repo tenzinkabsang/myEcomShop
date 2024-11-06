@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Ecom.Web.Pages;
 
 public class CartModel(ICatalogApiClient catalogApiClient, 
-    ICartService cartService,
+    ICartApiClient cartService,
     TestUser customer,
     IMapper mapper, 
     ILogger<CartModel> logger) : PageModel
@@ -46,7 +46,7 @@ public class CartModel(ICatalogApiClient catalogApiClient,
         //Cart.AddItem(mapper.Map<ProductViewModel>(product), 1);
 
         // Add cartItem to database.
-        await cartService.AddItem(customer.CustomerId, productId, quantity: 1);
+        await cartService.AddOrUpdateCart(customer.CustomerId, productId, quantity: 1);
 
         return RedirectToPage(new { returnUrl });
     }

@@ -34,10 +34,10 @@ public class FunDapperRepository(string connectionString)
                 Quantity = quantity
             });
 
-        return (await GetShoppingCart(customerId, productId)).First();
+        return (await GetCartItems(customerId, productId)).First();
     }
 
-    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCart(int customerId, int? productId = null)
+    public async Task<IEnumerable<ShoppingCartItem>> GetCartItems(int customerId, int? productId = null)
     {
         using var connection = new SqlConnection(connectionString);
         return await connection.QueryAsync<ShoppingCartItem>("""
