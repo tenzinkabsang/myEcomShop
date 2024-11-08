@@ -1,10 +1,12 @@
 ﻿using System.Text.Json;
-using Ecom.Web.Services.Dtos;
+using AutoMapper;
+using Ecom.Core.Extensions;
+using Ecom.Web.Models;
 using Ecom.Web.Services.Interfaces;
 
 namespace Ecom.Web.Services;
 
-public class CartApiClient(HttpClient httpClient) : ICartApiClient
+public class CartApiClient(HttpClient httpClient, ICatalogApiClient catalogApiClient, IMapper mapper) : ICartApiClient
 {
     public async Task<int?> AddOrUpdateCart(int customerId, int productId, int quantity)
     {
@@ -14,10 +16,34 @@ public class CartApiClient(HttpClient httpClient) : ICartApiClient
         return item?.Id;
     }
 
-    public async Task<IList<ShoppingCartItemDto>> GetShoppingCartItems(int customerId)
+    public async Task<IList<LineItem>> GetShoppingCartItems(int customerId)
     {
-        return await httpClient.GetFromJsonAsync<List<ShoppingCartItemDto>>($"items?customerId={customerId}") ?? [];
+        return await (await httpClient.GetFromJsonAsync<List<ShoppingCartItemDto>>($"items?customerId={customerId}") ?? [])
+            .SelectAwait(async item =>
+            {
+                var p = await catalogApiClient.GetProductAsync(item.ProductId);
+                return new LineItem
+                {
+                    CartLineId = item.Id,
+                    Quantity = item.Quantity,
+                    Product = mapper.Map<ProductViewModel>(p)
+                };
+            }).ToListAsync();
     }
 
     public Task RemoveItem(int shoppingCartItemId) => httpClient.DeleteAsync($"items/{shoppingCartItemId}");
+
+    #region Response Models
+    
+    private record ShoppingCartItemDto(
+        int Id,
+        int CustomerId,
+        int ProductId,
+        string ProductAttributesXml,
+        int Quantity,
+        DateTime ReserveInCartEndDateUtc,
+        bool Deleted
+        );
+
+    #endregion
 }

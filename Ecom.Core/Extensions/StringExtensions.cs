@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace Ecom.Core;
+namespace Ecom.Core.Extensions;
 
 public static class StringExtensions
 {

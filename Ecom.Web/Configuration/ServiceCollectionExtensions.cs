@@ -33,6 +33,13 @@ public static class ServiceCollectionExtensions
             client.BaseAddress = new Uri(settings.ShoppingCartApiBaseAddress);
         })
         .AddStandardResilienceHandler();
+
+        services.AddHttpClient<IOrderApiClient, OrderApiClient>((sp, client) =>
+        {
+            var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
+            client.BaseAddress = new Uri(settings.OrdersApiBaseAddress);
+        })
+        .AddStandardResilienceHandler();
     }
 
     /// <summary>

@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using Ecom.Core.Domain;
-using Ecom.Web.Services.Dtos;
+﻿using Ecom.Core.Domain;
 using Ecom.Web.Services.Interfaces;
 
 namespace Ecom.Web.Services;
@@ -41,4 +39,10 @@ public class CatalogApiClient(HttpClient httpClient) : ICatalogApiClient, IRecom
 
         return recommendations ?? [];
     }
+
+    #region Response Models
+
+    private record GetProductsResponse(int TotalCount, int TotalPages, IList<Product> Products);
+
+    #endregion
 }

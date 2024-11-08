@@ -1,5 +1,5 @@
-﻿using Ecom.Core;
-using Ecom.Core.Domain;
+﻿using Ecom.Core.Domain;
+using Ecom.Core.Extensions;
 using Ecom.Data;
 using Microsoft.EntityFrameworkCore;
 

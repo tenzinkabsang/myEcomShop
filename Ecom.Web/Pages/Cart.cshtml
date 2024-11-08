@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model?.Cart?.CartItems ?? Enumerable.Empty<LineItem>())
+        @foreach (var item in Model.Cart.CartItems)
         {
             <tr>
                 <td class="text-center">
@@ -42,8 +42,8 @@
                 </td>
                 <td class="text-center">
                     <form asp-page-handler="Remove" method="post">
-                        <input type="hidden" name="productId" value="@item.Product.Id" />
-                        <input type="hidden" name="returnUrl" value="@Model?.ReturnUrl" />
+                        <input type="hidden" name="shoppingCartItemId" value="@item.CartLineId" />
+                        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
                         <button type="submit" class="btn btn-light border border-secondary py-2 icon-hover px-3">
                             Remove
                         </button>
@@ -56,22 +56,22 @@
         <tr>
             <td colspan="3" class="text-right">Total:</td>
             <td class="text-right">
-                $@Model?.Cart?.CartTotal.ToString()
+                $@Model.Cart.CartTotal.ToString()
             </td>
         </tr>
     </tfoot>
 </table>
 <div class="text-center">
 
-    @if (Model?.Cart.IsEmpty ?? true)
+    @if (Model.Cart.IsEmpty)
     {
-        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" href="@Model?.ReturnUrl">
+        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" href="@Model.ReturnUrl">
             Your shopping cart is empty! Good stuff goes in here.
         </a>
     }
     else
     {
-        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" href="@Model?.ReturnUrl">Continue Shopping</a>
+        <a class="btn btn-light border border-secondary py-2 icon-hover px-3" href="@Model.ReturnUrl">Continue Shopping</a>
         <a class="btn btn-light border border-secondary py-2 icon-hover px-3" asp-action="Checkout" asp-controller="Order">Checkout</a>
     }
 </div>
