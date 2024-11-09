@@ -27,7 +27,7 @@ You should be able to make requests to:
 - [Web Project](https://localhost:5201/home/index) `https://localhost:5201/home/index`
 - [Catalog API](http://localhost:5011/swagger/index.html) `http://localhost:5011/swagger/index.html`
 - [Orders API](http://localhost:5012/swagger/index.html) `http://localhost:5012/swagger/index.html`
-- [RabbitMq](http://localhost:8088/) `http://localhost:8088 username: guest password: guest`
+- [RabbitMq](http://localhost:8088/) `http://localhost:8088` `username: guest` `password: guest`
 - [Serilog Seq Logging](http://localhost:5342) `http://localhost:5342`
 
 
