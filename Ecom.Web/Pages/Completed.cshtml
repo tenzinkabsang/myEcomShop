@@ -1,0 +1,15 @@
+﻿@page
+
+<div class="text-center">
+    <h4>Thanks!</h4>
+    <p>Thank you for placing order #@OrderId</p>
+    <p>We'll ship your order as soon as possible.</p>
+    <a class="btn btn-light border border-secondary py-2 icon-hover px-3" asp-controller="Home">Return to Store</a>
+</div>
+
+
+
+@functions {
+    [BindProperty(SupportsGet = true)]
+    public string OrderId { get; set; }
+}

@@ -12,6 +12,8 @@ public class OrderViewModel
     [BindNever]
     public IList<LineItem> Items { get; set; } = [];
 
+    public int CustomerId { get; set; }
+
     [Required(ErrorMessage = "Please enter your first name")]
     public string FirstName { get; set; }
 

@@ -12,9 +12,7 @@ public class ViewModelToEntityMapper : Profile
 
         CreateMap<LineItem, OrderItem>()
             .ForMember(dest => dest.Quantity, options => options.MapFrom(src => src.Quantity))
-            .ForMember(dest => dest.Product, options => options.MapFrom(src => src.Product))
-            .ForMember(dest => dest.CreatedDateUtc, options => options.Ignore())
-            .ForMember(dest => dest.ModifiedDateUtc, options => options.Ignore());
+            .ForMember(dest => dest.ProductId, options => options.MapFrom(src => src.Product.Id));
 
 
         CreateMap<OrderViewModel, Order>()

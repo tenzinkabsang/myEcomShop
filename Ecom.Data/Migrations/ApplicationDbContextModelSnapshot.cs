@@ -137,6 +137,9 @@ namespace Ecom.Data.Migrations
                     b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
@@ -153,6 +156,8 @@ namespace Ecom.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ShippingAddressId");
 
@@ -175,6 +180,9 @@ namespace Ecom.Data.Migrations
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProductAttributesXml")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -298,6 +306,12 @@ namespace Ecom.Data.Migrations
 
             modelBuilder.Entity("Ecom.Core.Domain.Order", b =>
                 {
+                    b.HasOne("Ecom.Core.Domain.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Ecom.Core.Domain.Address", "ShippingAddress")
                         .WithMany()
                         .HasForeignKey("ShippingAddressId")
@@ -313,13 +327,11 @@ namespace Ecom.Data.Migrations
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("Ecom.Core.Domain.Product", "Product")
+                    b.HasOne("Ecom.Core.Domain.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Ecom.Core.Domain.ShoppingCartItem", b =>
@@ -327,13 +339,13 @@ namespace Ecom.Data.Migrations
                     b.HasOne("Ecom.Core.Domain.Customer", null)
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Ecom.Core.Domain.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

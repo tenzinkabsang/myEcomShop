@@ -12,6 +12,8 @@ public class Order : BaseEntity, ISoftDeletedEntity, IAuditableEntity
 
     public bool Deleted { get; set; }
 
+    public int CustomerId { get; set; }
+
     public DateTime CreatedDateUtc { get; set; }
 
     public DateTime ModifiedDateUtc { get; set; }

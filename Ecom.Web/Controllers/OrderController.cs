@@ -16,7 +16,7 @@ public class OrderController : Controller
 
     public OrderController(IOrderApiClient orderApiClient,
         ICartApiClient cartService,
-        TestUser customer, 
+        TestUser customer,
         IMapper mapper)
     {
         _orderApiClient = orderApiClient;
@@ -25,32 +25,26 @@ public class OrderController : Controller
         _mapper = mapper;
     }
 
-    public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async Task<IActionResult> Checkout()
     {
         ViewBag.Cart = new Cart { CartItems = await _cartService.GetShoppingCartItems(_customer.CustomerId) };
-        await base.OnActionExecutionAsync(context, next);
-    }
-
-    public IActionResult Checkout()
-    {
         return View(new OrderViewModel());
     }
 
     [HttpPost]
-    public IActionResult Checkout(OrderViewModel model)
+    public async Task<IActionResult> Checkout(OrderViewModel model)
     {
-        if (!ViewBag.Cart.CartItems.Any())
+        var cartItems = await _cartService.GetShoppingCartItems(_customer.CustomerId);
+
+        if (!cartItems.Any())
             ModelState.AddModelError("", "Sorry, your cart is empty!");
 
         if (!ModelState.IsValid)
             return View();
-        else
-        {
-            model.Items = ViewBag.Cart.CartItems;
 
-            int orderId = _orderApiClient.ProcessCheckout(_mapper.Map<Order>(model));
-
-            return RedirectToPage("/Completed", new { OrderId = orderId });
-        }
+        model.Items = cartItems;
+        model.CustomerId = _customer.CustomerId;
+        int? orderId = await _orderApiClient.ProcessCheckout(model);
+        return RedirectToPage("/Completed", new { OrderId = orderId });
     }
 }

@@ -77,30 +77,6 @@ namespace Ecom.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GiftWrap = table.Column<bool>(type: "bit", nullable: false),
-                    ShippingAddressId = table.Column<int>(type: "int", nullable: false),
-                    IsShipped = table.Column<bool>(type: "bit", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDateUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDateUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Addresses_ShippingAddressId",
-                        column: x => x.ShippingAddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Images",
                 columns: table => new
                 {
@@ -117,6 +93,36 @@ namespace Ecom.Data.Migrations
                         name: "FK_Images_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GiftWrap = table.Column<bool>(type: "bit", nullable: false),
+                    ShippingAddressId = table.Column<int>(type: "int", nullable: false),
+                    IsShipped = table.Column<bool>(type: "bit", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDateUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDateUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Addresses_ShippingAddressId",
+                        column: x => x.ShippingAddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "Id");
                 });
 
@@ -142,14 +148,12 @@ namespace Ecom.Data.Migrations
                         name: "FK_ShoppingCartItems_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ShoppingCartItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -160,6 +164,7 @@ namespace Ecom.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductAttributesXml = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDateUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDateUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: true)
@@ -176,8 +181,7 @@ namespace Ecom.Data.Migrations
                         name: "FK_OrderItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -199,6 +203,11 @@ namespace Ecom.Data.Migrations
                 name: "IX_OrderItems_ProductId",
                 table: "OrderItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomerId",
+                table: "Orders",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ShippingAddressId",
@@ -232,10 +241,10 @@ namespace Ecom.Data.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

@@ -1,12 +1,21 @@
-﻿using Ecom.Core.Domain;
+﻿using AutoMapper;
+using Ecom.Core.Domain;
+using Ecom.Core.Extensions;
+using Ecom.Web.Models;
 using Ecom.Web.Services.Interfaces;
 
 namespace Ecom.Web.Services;
 
-public class OrderApiClient(HttpClient httpClient) : IOrderApiClient
+public class OrderApiClient(HttpClient httpClient, IMapper mapper) : IOrderApiClient
 {
-    public int ProcessCheckout(Order order)
+    public async Task<int?> ProcessCheckout(OrderViewModel model)
     {
-        return 1;
+        var value = mapper.Map<Order>(model);
+        var httpResponse = await httpClient.PostAsJsonAsync("checkout", value);
+        var content = await httpResponse.Content.ReadAsStringAsync();
+        var order = content.FromJson<CreateOrderResponse>();
+        return order?.OrderId;
     }
+
+    private record CreateOrderResponse(int OrderId, int CustomerId);
 }

@@ -20,12 +20,26 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<ShoppingCartItem>()
             .HasOne<Customer>()
             .WithMany()
-            .HasForeignKey(s => s.CustomerId);
+            .HasForeignKey(s => s.CustomerId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<ShoppingCartItem>()
             .HasOne<Product>()
             .WithMany()
-            .HasForeignKey(s => s.ProductId);
+            .HasForeignKey(s => s.ProductId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Order>()
+            .HasOne<Customer>()
+            .WithMany()
+            .HasForeignKey(x => x.CustomerId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne<Product>()
+            .WithMany()
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

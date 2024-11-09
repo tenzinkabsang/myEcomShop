@@ -26,6 +26,7 @@ public class CartApiClient(HttpClient httpClient, ICatalogApiClient catalogApiCl
                 {
                     CartLineId = item.Id,
                     Quantity = item.Quantity,
+                    ProductAttributesXml = item.ProductAttributesXml,
                     Product = mapper.Map<ProductViewModel>(p)
                 };
             }).ToListAsync();
