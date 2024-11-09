@@ -28,6 +28,7 @@
                         <h5 class="card-title mb-3">Guest checkout</h5>
 
                         <form asp-action="Checkout" method="post">
+                            <input type="hidden" name="customerId" value="@Model.CustomerId" />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="row">
                                 <div class="col-6 mb-3">

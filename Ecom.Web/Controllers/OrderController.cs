@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Ecom.Core.Domain;
 using Ecom.Web.Models;
 using Ecom.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Ecom.Web.Controllers;
 
@@ -28,7 +26,10 @@ public class OrderController : Controller
     public async Task<IActionResult> Checkout()
     {
         ViewBag.Cart = new Cart { CartItems = await _cartService.GetShoppingCartItems(_customer.CustomerId) };
-        return View(new OrderViewModel());
+        return View(new OrderViewModel
+        {
+            CustomerId = _customer.CustomerId
+        });
     }
 
     [HttpPost]
@@ -43,7 +44,6 @@ public class OrderController : Controller
             return View();
 
         model.Items = cartItems;
-        model.CustomerId = _customer.CustomerId;
         int? orderId = await _orderApiClient.ProcessCheckout(model);
         return RedirectToPage("/Completed", new { OrderId = orderId });
     }

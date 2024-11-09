@@ -9,8 +9,8 @@ public static class CheckoutEndpoints
     {
         app.MapPost("checkout", async ([FromBody] Order data, CheckoutService checkoutService) =>
         {
-            var newOrder = await checkoutService.ProcessOrder(data);
-            return Results.Created($"orders/{newOrder.OrderId}", newOrder);
+            var newOrderInfo = await checkoutService.ProcessOrder(data);
+            return Results.Created($"orders/{newOrderInfo.OrderId}", newOrderInfo);
         });
     }
 }
