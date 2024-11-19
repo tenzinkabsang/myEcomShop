@@ -1,4 +1,5 @@
-﻿using Ecom.Core.Events;
+﻿using Ecom.Core.Caching;
+using Ecom.Core.Events;
 using Ecom.Data;
 using Ecom.Web.Configuration;
 using Ecom.Web.Models;
@@ -18,7 +19,7 @@ builder.Services.ConfigureCache(builder.Configuration);
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection(nameof(ApiSettings)));
 builder.Services.ConfigureHttpApiClients();
 
-
+builder.Services.AddSingleton<IStaticCacheManager, HybridCacheManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPublisher(sp));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

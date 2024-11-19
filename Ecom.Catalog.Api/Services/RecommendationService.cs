@@ -11,7 +11,7 @@ public sealed class RecommendationService(IRepository<Product> productRepository
 
     public async Task<IList<Product>> GetRecommendations(int productId)
     {
-        var product = await productRepository.GetByIdAsync(productId);
+        var product = await productRepository.GetByIdAsync(productId, query => query.Include(q => q.Images), cache => default);
 
         logger.LogInformation("Getting recommendentaions for {Product}", product.ToJson());
         return await productRepository.GetAllAsync(

@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using Ecom.Core.Caching;
 using Ecom.Core.Events;
 using Ecom.Core.Middlewares;
 using Ecom.Data;
+using Ecom.Orders.Api.Configuration;
 using Ecom.Orders.Api.Endpoints.Checkout;
 using Ecom.Orders.Api.Endpoints.ShoppingCart;
 using Ecom.Orders.Api.Services;
@@ -26,12 +28,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
 });
 
-var redisConnStr = builder.Configuration[builder.Configuration["AZURE_REDIS_CONNECTION_STRING"] ?? "ConnectionStrings:Redis"];
-if (!string.IsNullOrWhiteSpace(connectionString))
-    builder.Services.AddStackExchangeRedisCache(options => options.Configuration = redisConnStr);
-else
-    builder.Services.AddDistributedMemoryCache();
 
+builder.Services.ConfigureCache(builder.Configuration);
+builder.Services.AddSingleton<IStaticCacheManager, HybridCacheManager>();
 builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPublisher(sp));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddAutoMapper(typeof(Program));

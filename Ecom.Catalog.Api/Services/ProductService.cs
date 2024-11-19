@@ -33,7 +33,7 @@ public class ProductService(IRepository<Product> productRepository, ILogger<Prod
     {
         logger.LogInformation("Retrieving product with {ProductId}", id);
 
-        var product = await productRepository.GetByIdAsync(id, query => query.Include(q => q.Images));
+        var product = await productRepository.GetByIdAsync(id, query => query.Include(q => q.Images), cache => default);
 
         if (product is null)
             throw new ArgumentNullException($"No product found for id: {id}");

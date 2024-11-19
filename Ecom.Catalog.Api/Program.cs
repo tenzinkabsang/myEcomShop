@@ -6,6 +6,8 @@ using Ecom.Data;
 using Ecom.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Ecom.Catalog.Api.Configuration;
+using Ecom.Core.Caching;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,15 +27,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
 });
 
-var connectionString = builder.Configuration[builder.Configuration["AZURE_REDIS_CONNECTION_STRING"] ?? "ConnectionStrings:Redis"];
-
-if (!string.IsNullOrWhiteSpace(connectionString))
-    builder.Services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
-else
-    builder.Services.AddDistributedMemoryCache();
-
+builder.Services.ConfigureCache(builder.Configuration);
 
 builder.Services.AddSingleton<IEventPublisher, EventPublisher>(sp => new EventPublisher(sp));
+builder.Services.AddSingleton<IStaticCacheManager, HybridCacheManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 builder.Services.AddScoped<IProductService, ProductService>();
