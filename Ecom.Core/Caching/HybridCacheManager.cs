@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Configuration;
 
 namespace Ecom.Core.Caching;
 
-public class HybridCacheManager(HybridCache cache) : IStaticCacheManager
+public class HybridCacheManager(HybridCache cache, IConfiguration configuration) : IStaticCacheManager
 {
     public async Task<T> GetAsync<T>(CacheKey key, Func<Task<T>> acquire)
     {
@@ -36,14 +37,12 @@ public class HybridCacheManager(HybridCache cache) : IStaticCacheManager
         await cache.RemoveByTagAsync(tags);
     }
 
-    public CacheKey PrepareKey(CacheKey cacheKey, params object[] cacheKeyParameters)
-    {
-        throw new NotImplementedException();
-    }
-
     public CacheKey PrepareKeyForDefaultCache(CacheKey cacheKey, params object[] cacheKeyParameters)
     {
         var key = cacheKey.Create(CreateCacheKeyParameters, cacheKeyParameters);
+        if (int.TryParse(configuration["CacheSettings:DefaultCacheTime"], out var time))
+            key.CacheTime = TimeSpan.FromMinutes(time);
+
         return key;
     }
 

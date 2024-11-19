@@ -34,6 +34,7 @@ builder.Services.AddSingleton<IStaticCacheManager, HybridCacheManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped(typeof(IConsumer<>), typeof(CacheEventConsumer<>));
 
 
 var app = builder.Build();

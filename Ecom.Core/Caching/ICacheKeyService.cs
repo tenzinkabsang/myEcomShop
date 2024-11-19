@@ -3,14 +3,6 @@
 public interface ICacheKeyService
 {
     /// <summary>
-    /// Create a copy of cache key and fills it by passed parameters
-    /// </summary>
-    /// <param name="cacheKey">Initial cache key</param>
-    /// <param name="cacheKeyParameters">Parameters to create a cache key</param>
-    /// <returns>Cache key</returns>
-    CacheKey PrepareKey(CacheKey cacheKey, params object[] cacheKeyParameters);
-
-    /// <summary>
     /// Create a copy of cache key using the default cache time and fill it by passed parameters
     /// </summary>
     /// <param name="cacheKey">Initial cache key</param>
