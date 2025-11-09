@@ -18,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -63,4 +64,7 @@ app.UseSerilogRequestLogging(options =>
 app.MapControllers();
 
 SeedData.Populate(app);
+
+app.MapHealthChecks("/health");
+
 app.Run();

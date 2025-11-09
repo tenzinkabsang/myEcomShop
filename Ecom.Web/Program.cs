@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
+builder.Services.AddHealthChecks();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -64,7 +64,7 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.UseSession();
 app.UseSerilogRequestLogging();
-
+app.MapHealthChecks("/health");
 app.MapControllerRoute(
     name: "catpage",
     pattern: "{category}/Page{productPage:int}",

@@ -18,6 +18,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -74,4 +75,5 @@ app.UseSerilogRequestLogging(options =>
 
 app.MapShoppingCartEndpoints();
 app.MapCheckoutEndpoints();
+app.MapHealthChecks("/health");
 app.Run();

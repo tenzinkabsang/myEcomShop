@@ -25,6 +25,12 @@ services:
       - "ecom.database"
       - "myecomshop.seq"
       - "ecom.cache"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   ecom.orders.api:
     image: ${DOCKER_REGISTRY-}ecomordersapi
@@ -38,6 +44,12 @@ services:
       - "rabbit_local"
       - "myecomshop.seq"
       - "ecom.queueprocessor"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   ecom.queueprocessor:
     image: ${DOCKER_REGISTRY-}ecomqueueprocessor
@@ -59,6 +71,12 @@ services:
       - MSSQL_SA_PASSWORD=@Password1234
     volumes:
       - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "@Password1234" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   myecomshop.seq:
    image: datalust/seq:latest
@@ -81,6 +99,12 @@ services:
    restart: always
    ports:
     - '6379:6379'
+   healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
   
  
 

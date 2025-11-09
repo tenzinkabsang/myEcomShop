@@ -17,16 +17,17 @@ public static class ServiceCollectionExtensions
         {
             var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
             client.BaseAddress = new Uri(settings.CatalogApiBaseAddress);
-        });
+        })
+        .AddStandardResilienceHandler();
         // .AddCustomResilienceHandler();
 
         services.AddHttpClient<IRecommendationApiClient, CatalogApiClient>((sp, client) =>
         {
             var settings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
             client.BaseAddress = new Uri(settings.CatalogApiBaseAddress);
-        });
+        })
         // Similar to the custom one we implemented!
-        //.AddStandardResilienceHandler();
+        .AddStandardResilienceHandler();
 
         services.AddHttpClient<ICartApiClient, CartApiClient>((sp, client) =>
         {
